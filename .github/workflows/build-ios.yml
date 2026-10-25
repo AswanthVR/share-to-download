@@ -36,44 +36,44 @@ jobs:
           retention-days: 14
 
   # ────────────────────────────────────────────────────────────────────────────
-   build-ios:
-      name: iOS IPA (unsigned)
-      runs-on: macos-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-  
-        - name: Set up Flutter
-          uses: subosito/flutter-action@v2
-          with:
-            flutter-version: '3.47.8'
-            channel: 'stable'
-            cache: true
-  
-        - name: Install dependencies
-          run: flutter pub get
-  
-        - name: Generate iOS scaffolding
-          run: flutter create . --platforms=ios
-  
-        - name: Install CocoaPods dependencies
-          run: |
-            cd ios
-            pod install --repo-update
-  
-        - name: Build iOS (no code sign)
-          run: flutter build ios --release --no-codesign
-  
-        - name: Create IPA from .app bundle
-          run: |
-            mkdir -p Payload
-            cp -r build/ios/iphoneos/Runner.app Payload/
-            zip -r MediaDownloader.ipa Payload/
-            rm -rf Payload
-  
-        - name: Upload IPA artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: MediaDownloader-iOS-unsigned
-            path: MediaDownloader.ipa
-            retention-days: 14
+  build-ios:
+    name: iOS IPA (unsigned)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate iOS scaffolding
+        run: flutter create . --platforms=ios
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install --repo-update
+
+      - name: Build iOS (no code sign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Create IPA from .app bundle
+        run: |
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r MediaDownloader.ipa Payload/
+          rm -rf Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MediaDownloader-iOS-unsigned
+          path: MediaDownloader.ipa
+          retention-days: 14
