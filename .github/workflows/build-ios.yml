@@ -36,10 +36,9 @@ jobs:
           retention-days: 14
 
   # ────────────────────────────────────────────────────────────────────────────
-  build-ios:
+ build-ios:
     name: iOS IPA (unsigned)
     runs-on: macos-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,6 +53,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Generate iOS scaffolding
+        run: flutter create . --platforms=ios
+
       - name: Install CocoaPods dependencies
         run: |
           cd ios
@@ -62,7 +64,6 @@ jobs:
       - name: Build iOS (no code sign)
         run: flutter build ios --release --no-codesign
 
-      # Package .app → IPA (Payload zip) for sideloading via AltStore/Sideloadly
       - name: Create IPA from .app bundle
         run: |
           mkdir -p Payload
