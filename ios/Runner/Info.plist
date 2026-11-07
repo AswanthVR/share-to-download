@@ -49,5 +49,7 @@
 	<string>Save downloads and compressed photos to your library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pick photos to compress and save media to your library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan QR codes and barcodes.</string>
 </dict>
 </plist>

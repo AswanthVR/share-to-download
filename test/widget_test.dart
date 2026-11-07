@@ -8,6 +8,8 @@ void main() {
     expect(find.text('Utility box'), findsOneWidget);
     expect(find.text('Media downloader'), findsOneWidget);
     expect(find.text('Photo compress'), findsOneWidget);
+    expect(find.text('QR & barcode'), findsOneWidget);
+    expect(find.text('PDF tools'), findsOneWidget);
   });
 
   group('PinterestService URL parsing tests', () {

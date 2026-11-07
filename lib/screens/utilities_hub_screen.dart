@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../widgets/glass_ui.dart';
 import 'downloader_screen.dart';
+import 'pdf_studio_screen.dart';
 import 'photo_compress_screen.dart';
+import 'qr_tool_screen.dart';
 
 class UtilitiesHubScreen extends StatefulWidget {
   const UtilitiesHubScreen({super.key});
@@ -30,6 +32,24 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
       icon: Icons.compress_rounded,
       gradient: [Color(0xFF5B4DFF), Color(0xFF00C9FF)],
     ),
+    _UtilityTool(
+      title: 'QR & barcode',
+      subtitle: 'Scan, gallery, or clipboard',
+      icon: Icons.qr_code_scanner_rounded,
+      gradient: [Color(0xFF00C97A), Color(0xFF5EFCE8)],
+    ),
+    _UtilityTool(
+      title: 'PDF tools',
+      subtitle: 'Merge, split, receipt PDFs',
+      icon: Icons.picture_as_pdf_rounded,
+      gradient: [Color(0xFFFF8A3D), Color(0xFFFFD26B)],
+    ),
+    _UtilityTool(
+      title: 'Images to PDF',
+      subtitle: 'Stack photos like a scan',
+      icon: Icons.document_scanner_outlined,
+      gradient: [Color(0xFF7B61FF), Color(0xFFB693FF)],
+    ),
   ];
 
   @override
@@ -37,19 +57,19 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
     super.initState();
     _entrance = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1100),
+      duration: const Duration(milliseconds: 1400),
     );
     _fades = List.generate(_tools.length, (i) {
-      final start = 0.2 + i * 0.14;
-      final end = (start + 0.5).clamp(0.0, 1.0);
+      final start = 0.12 + i * 0.09;
+      final end = (start + 0.45).clamp(0.0, 1.0);
       return CurvedAnimation(
         parent: _entrance,
         curve: Interval(start, end, curve: AppleMotion.entrance),
       );
     });
     _slides = List.generate(_tools.length, (i) {
-      final start = 0.2 + i * 0.14;
-      final end = (start + 0.5).clamp(0.0, 1.0);
+      final start = 0.12 + i * 0.09;
+      final end = (start + 0.45).clamp(0.0, 1.0);
       return Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
           .animate(CurvedAnimation(
         parent: _entrance,
@@ -68,7 +88,10 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
   void _openTool(int index) {
     final page = switch (index) {
       0 => const DownloaderScreen(),
-      _ => const PhotoCompressScreen(),
+      1 => const PhotoCompressScreen(),
+      2 => const QrToolScreen(),
+      3 => const PdfStudioScreen(initialTab: PdfStudioTab.merge),
+      _ => const PdfStudioScreen(initialTab: PdfStudioTab.images),
     };
     pushAppleGlassPage(context, page);
   }
