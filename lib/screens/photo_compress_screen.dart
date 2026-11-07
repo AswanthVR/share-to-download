@@ -236,7 +236,7 @@ class _PhotoCompressScreenState extends State<PhotoCompressScreen>
               if (!hasImage)
                 AnimatedBuilder(
                   animation: _shimmer,
-                  builder: (_, __) {
+                  builder: (_, _) {
                     return DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -318,7 +318,7 @@ class _PhotoCompressScreenState extends State<PhotoCompressScreen>
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: _presets.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, i) {
           final selected = i == _selectedPresetIndex;
           final busy = _phase == _CompressPhase.compressing;
@@ -385,7 +385,7 @@ class _PhotoCompressScreenState extends State<PhotoCompressScreen>
           child: TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: _progress),
             duration: const Duration(milliseconds: 200),
-            builder: (_, value, __) => LinearProgressIndicator(
+            builder: (_, value, _) => LinearProgressIndicator(
               value: value,
               minHeight: 8,
               backgroundColor: Colors.grey.withValues(alpha: 0.2),
