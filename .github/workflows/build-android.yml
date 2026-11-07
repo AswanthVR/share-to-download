@@ -1,0 +1,53 @@
+name: Build Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build
+        required: true
+        default: main
+        type: string
+
+run-name: Android · ${{ inputs.branch }}
+
+jobs:
+  build-android:
+    name: Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Verify branch
+        run: |
+          echo "Building from ref: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build APK (release)
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UtilityBox-Android-${{ inputs.branch }}
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 14
