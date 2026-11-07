@@ -116,7 +116,7 @@ class _QrToolScreenState extends State<QrToolScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'QR & barcode',
+          'QR intelligence',
           style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.4),
         ),
       ),

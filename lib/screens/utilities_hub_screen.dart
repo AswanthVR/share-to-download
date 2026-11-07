@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../branding/omnix_brand.dart';
 import '../widgets/glass_ui.dart';
+import '../widgets/omnix_logo.dart';
 import 'downloader_screen.dart';
 import 'pdf_studio_screen.dart';
 import 'photo_compress_screen.dart';
@@ -16,39 +18,41 @@ class UtilitiesHubScreen extends StatefulWidget {
 class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
     with TickerProviderStateMixin {
   late final AnimationController _entrance;
+  late final AnimationController _logoPulse;
   late final List<Animation<double>> _fades;
   late final List<Animation<Offset>> _slides;
+  late final Animation<double> _headerFade;
 
-  static const _tools = [
+  static final _tools = [
     _UtilityTool(
-      title: 'Media downloader',
-      subtitle: 'Pinterest & YouTube to gallery',
+      title: OmnixBrand.toolCopy[0].$1,
+      subtitle: OmnixBrand.toolCopy[0].$2,
       icon: Icons.download_rounded,
-      gradient: [Color(0xFFE60023), Color(0xFFFF4060)],
+      gradient: const [Color(0xFFE60023), Color(0xFFFF4060)],
     ),
     _UtilityTool(
-      title: 'Photo compress',
-      subtitle: 'Shrink photos to a target size',
+      title: OmnixBrand.toolCopy[1].$1,
+      subtitle: OmnixBrand.toolCopy[1].$2,
       icon: Icons.compress_rounded,
-      gradient: [Color(0xFF5B4DFF), Color(0xFF00C9FF)],
+      gradient: const [Color(0xFF5B4DFF), Color(0xFF00C9FF)],
     ),
     _UtilityTool(
-      title: 'QR & barcode',
-      subtitle: 'Scan, gallery, or clipboard',
+      title: OmnixBrand.toolCopy[2].$1,
+      subtitle: OmnixBrand.toolCopy[2].$2,
       icon: Icons.qr_code_scanner_rounded,
-      gradient: [Color(0xFF00C97A), Color(0xFF5EFCE8)],
+      gradient: const [Color(0xFF00C97A), Color(0xFF5EFCE8)],
     ),
     _UtilityTool(
-      title: 'PDF tools',
-      subtitle: 'Merge, split, receipt PDFs',
+      title: OmnixBrand.toolCopy[3].$1,
+      subtitle: OmnixBrand.toolCopy[3].$2,
       icon: Icons.picture_as_pdf_rounded,
-      gradient: [Color(0xFFFF8A3D), Color(0xFFFFD26B)],
+      gradient: const [Color(0xFFFF8A3D), Color(0xFFFFD26B)],
     ),
     _UtilityTool(
-      title: 'Images to PDF',
-      subtitle: 'Stack photos like a scan',
+      title: OmnixBrand.toolCopy[4].$1,
+      subtitle: OmnixBrand.toolCopy[4].$2,
       icon: Icons.document_scanner_outlined,
-      gradient: [Color(0xFF7B61FF), Color(0xFFB693FF)],
+      gradient: const [Color(0xFF7B61FF), Color(0xFFB693FF)],
     ),
   ];
 
@@ -57,10 +61,20 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
     super.initState();
     _entrance = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 1600),
     );
+    _logoPulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..repeat(reverse: true);
+
+    _headerFade = CurvedAnimation(
+      parent: _entrance,
+      curve: const Interval(0, 0.35, curve: AppleMotion.entrance),
+    );
+
     _fades = List.generate(_tools.length, (i) {
-      final start = 0.12 + i * 0.09;
+      final start = 0.15 + i * 0.085;
       final end = (start + 0.45).clamp(0.0, 1.0);
       return CurvedAnimation(
         parent: _entrance,
@@ -68,9 +82,9 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
       );
     });
     _slides = List.generate(_tools.length, (i) {
-      final start = 0.12 + i * 0.09;
+      final start = 0.15 + i * 0.085;
       final end = (start + 0.45).clamp(0.0, 1.0);
-      return Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
+      return Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
           .animate(CurvedAnimation(
         parent: _entrance,
         curve: Interval(start, end, curve: AppleMotion.standard),
@@ -82,6 +96,7 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
   @override
   void dispose() {
     _entrance.dispose();
+    _logoPulse.dispose();
     super.dispose();
   }
 
@@ -107,8 +122,9 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
           ),
           slivers: [
             SliverToBoxAdapter(child: _buildHeader(isDark)),
+            SliverToBoxAdapter(child: _buildSectionTitle(isDark)),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -117,9 +133,10 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
                       child: SlideTransition(
                         position: _slides[index],
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.only(bottom: 14),
                           child: _UtilityCard(
                             tool: _tools[index],
+                            index: index,
                             onTap: () => _openTool(index),
                           ),
                         ),
@@ -137,46 +154,82 @@ class _UtilitiesHubScreenState extends State<UtilitiesHubScreen>
   }
 
   Widget _buildHeader(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FrostedPanel(
-            borderRadius: 20,
-            blur: 18,
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-            child: Row(
+    return FadeTransition(
+      opacity: _headerFade,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.blur_on_rounded,
-                  color: isDark ? Colors.white70 : Colors.black54,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Personal tools in one place',
-                    style: TextStyle(
-                      fontSize: 14,
-                      letterSpacing: -0.2,
-                      color: isDark ? Colors.white70 : Colors.black87,
-                    ),
+                ScaleTransition(
+                  scale: Tween<double>(begin: 0.92, end: 1.02).animate(
+                    CurvedAnimation(parent: _logoPulse, curve: Curves.easeInOut),
                   ),
+                  child: const OmnixLogo(size: 64, showWordmark: true),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Utility box',
-            style: TextStyle(
-              fontSize: 38,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -1.2,
-              height: 1.05,
+            const SizedBox(height: 18),
+            FrostedPanel(
+              borderRadius: 18,
+              blur: 16,
+              borderColor: OmnixBrand.primary.withValues(alpha: 0.22),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.verified_user_outlined,
+                    size: 20,
+                    color: OmnixBrand.primary.withValues(alpha: 0.9),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          OmnixBrand.tagline,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -0.2,
+                            color: isDark ? Colors.white : OmnixBrand.slate,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          OmnixBrand.workspaceLabel,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark ? Colors.white54 : Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 4),
+      child: Text(
+        'Applications',
+        style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.2,
+          color: isDark ? Colors.white54 : Colors.black45,
+        ),
       ),
     );
   }
@@ -197,9 +250,14 @@ class _UtilityTool {
 }
 
 class _UtilityCard extends StatelessWidget {
-  const _UtilityCard({required this.tool, required this.onTap});
+  const _UtilityCard({
+    required this.tool,
+    required this.index,
+    required this.onTap,
+  });
 
   final _UtilityTool tool;
+  final int index;
   final VoidCallback onTap;
 
   @override
@@ -208,52 +266,67 @@ class _UtilityCard extends StatelessWidget {
     return GlassPressable(
       onTap: onTap,
       child: FrostedPanel(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(18),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(13),
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: tool.gradient),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: tool.gradient.first.withValues(alpha: 0.4),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
+                    color: tool.gradient.first.withValues(alpha: 0.35),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
-              child: Icon(tool.icon, color: Colors.white, size: 28),
+              child: Icon(tool.icon, color: Colors.white, size: 26),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    tool.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                      letterSpacing: -0.4,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        tool.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 17,
+                          letterSpacing: -0.35,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        (index + 1).toString().padLeft(2, '0'),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? Colors.white38 : Colors.black38,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(
                     tool.subtitle,
                     style: TextStyle(
                       fontSize: 13,
-                      letterSpacing: -0.15,
+                      height: 1.25,
+                      letterSpacing: -0.1,
                       color: isDark ? Colors.white60 : Colors.black54,
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             Icon(
-              Icons.chevron_right_rounded,
-              size: 22,
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
               color: isDark ? Colors.white38 : Colors.black26,
             ),
           ],

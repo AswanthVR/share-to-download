@@ -57,12 +57,12 @@ jobs:
         run: |
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
-          zip -r UtilityBox.ipa Payload/
+          zip -r OMNIX.ipa Payload/
           rm -rf Payload
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: UtilityBox-iOS-${{ inputs.branch }}
-          path: UtilityBox.ipa
+          name: OMNIX-iOS-${{ inputs.branch }}
+          path: OMNIX.ipa
           retention-days: 14

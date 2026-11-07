@@ -1,5 +1,5 @@
 name: pin_download
-description: "A new Flutter project."
+description: "OMNIX — personal productivity suite (media, images, QR, PDF)."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -49,6 +49,10 @@ dependencies:
   url_launcher: ^6.3.3
   pdfrx: ^2.12.0
   image: ^4.11.0
+
+# `image` 4.11+ requires archive with ZLibDecoder.decodeLazy (4.5+).
+dependency_overrides:
+  archive: ^4.6.0
 
 dev_dependencies:
   flutter_test:

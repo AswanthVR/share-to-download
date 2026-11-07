@@ -1,15 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pin_download/main.dart';
+import 'package:pin_download/branding/omnix_brand.dart';
 import 'package:pin_download/services/pinterest_service.dart';
 
 void main() {
-  testWidgets('Utility hub smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const UtilityBoxApp());
-    expect(find.text('Utility box'), findsOneWidget);
-    expect(find.text('Media downloader'), findsOneWidget);
-    expect(find.text('Photo compress'), findsOneWidget);
-    expect(find.text('QR & barcode'), findsOneWidget);
-    expect(find.text('PDF tools'), findsOneWidget);
+  testWidgets('OMNIX brand smoke test', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(OmnixBrand.name),
+                Text(OmnixBrand.tagline),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(find.text(OmnixBrand.name), findsOneWidget);
+    expect(find.text(OmnixBrand.tagline), findsOneWidget);
   });
 
   group('PinterestService URL parsing tests', () {

@@ -7,7 +7,7 @@ import 'package:share_plus/share_plus.dart';
 class FileExportService {
   static Future<String> newOutputPath(String basename) async {
     final dir = await getApplicationDocumentsDirectory();
-    final exports = Directory(p.join(dir.path, 'UtilityBox'));
+    final exports = Directory(p.join(dir.path, 'OMNIX'));
     if (!await exports.exists()) {
       await exports.create(recursive: true);
     }

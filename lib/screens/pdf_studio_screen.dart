@@ -103,7 +103,7 @@ class _PdfStudioScreenState extends State<PdfStudioScreen>
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'PDF tools',
+          'Document studio',
           style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.4),
         ),
       ),

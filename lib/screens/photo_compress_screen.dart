@@ -164,7 +164,7 @@ class _PhotoCompressScreenState extends State<PhotoCompressScreen>
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Photo compress',
+          'Image optimization',
           style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.4),
         ),
       ),

@@ -270,7 +270,7 @@ class _DownloaderScreenState extends State<DownloaderScreen>
             ),
             const SizedBox(width: 10),
             const Text(
-              'Media downloader',
+              'Media capture',
               style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.4),
             ),
           ],

@@ -141,7 +141,7 @@ class _AuroraBackgroundState extends State<AuroraBackground>
                   math.cos(t * 0.7) * 0.35 - 0.5,
                 ),
                 size: 320,
-                color: const Color(0xFFE60023).withValues(alpha: dark ? 0.35 : 0.28),
+                color: const Color(0xFF4F46E5).withValues(alpha: dark ? 0.32 : 0.22),
               ),
               _blob(
                 alignment: Alignment(
@@ -149,7 +149,7 @@ class _AuroraBackgroundState extends State<AuroraBackground>
                   math.sin(t * 0.8) * 0.4 + 0.45,
                 ),
                 size: 280,
-                color: const Color(0xFF5B4DFF).withValues(alpha: dark ? 0.32 : 0.22),
+                color: const Color(0xFF6366F1).withValues(alpha: dark ? 0.28 : 0.18),
               ),
               _blob(
                 alignment: Alignment(
