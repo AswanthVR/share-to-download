@@ -29,7 +29,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.0'
+          flutter-version: '3.47.8'
           channel: stable
           cache: true
 
@@ -41,6 +41,9 @@ jobs:
 
       - name: Test
         run: flutter test
+
+      - name: Generate iOS scaffolding
+        run: flutter create . --platforms=ios
 
       - name: Install CocoaPods dependencies
         run: |
