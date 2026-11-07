@@ -3,11 +3,11 @@ import 'package:pin_download/main.dart';
 import 'package:pin_download/services/pinterest_service.dart';
 
 void main() {
-  testWidgets('Pin Downloader smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const PinDownloadApp());
-    expect(find.text('Pin Downloader'), findsOneWidget);
-    expect(find.text('Paste'), findsOneWidget);
-    expect(find.text('Get Video'), findsOneWidget);
+  testWidgets('Utility hub smoke test', (WidgetTester tester) async {
+    await tester.pumpWidget(const UtilityBoxApp());
+    expect(find.text('Utility box'), findsOneWidget);
+    expect(find.text('Media downloader'), findsOneWidget);
+    expect(find.text('Photo compress'), findsOneWidget);
   });
 
   group('PinterestService URL parsing tests', () {

@@ -1,58 +1,46 @@
-name: Build Apps (Android APK + iOS IPA)
+name: Build iOS
 
 on:
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build
+        required: true
+        default: main
+        type: string
+
+run-name: iOS · ${{ inputs.branch }}
 
 jobs:
-  # ────────────────────────────────────────────────────────────────────────────
-  build-android:
-    name: Android APK
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.32.0'
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build APK (release, unsigned)
-        run: flutter build apk --release
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: MediaDownloader-Android
-          path: build/app/outputs/flutter-apk/app-release.apk
-          retention-days: 14
-
-  # ────────────────────────────────────────────────────────────────────────────
   build-ios:
-    name: iOS IPA (unsigned)
+    name: Unsigned IPA
     runs-on: macos-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Verify branch
+        run: |
+          echo "Building from ref: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.32.0'
-          channel: 'stable'
+          channel: stable
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
 
       - name: Install CocoaPods dependencies
         run: |
@@ -62,17 +50,16 @@ jobs:
       - name: Build iOS (no code sign)
         run: flutter build ios --release --no-codesign
 
-      # Package .app → IPA (Payload zip) for sideloading via AltStore/Sideloadly
-      - name: Create IPA from .app bundle
+      - name: Package IPA
         run: |
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
-          zip -r MediaDownloader.ipa Payload/
+          zip -r UtilityBox.ipa Payload/
           rm -rf Payload
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MediaDownloader-iOS-unsigned
-          path: MediaDownloader.ipa
+          name: UtilityBox-iOS-${{ inputs.branch }}
+          path: UtilityBox.ipa
           retention-days: 14
